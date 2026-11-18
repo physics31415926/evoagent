@@ -1,6 +1,6 @@
 {
   "name": "dsh-evoagent",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "Budgeted multi-strategy exploration with explicit plans and independent verification",
   "type": "module",
   "main": "./index.js",

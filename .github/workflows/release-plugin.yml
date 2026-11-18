@@ -31,9 +31,9 @@ jobs:
       - name: Check release inputs
         run: node scripts/release-plugin.mjs --check
       - name: Test plugin
-        run: node --test --test-isolation=none plugins/evoagent/tests/*.test.js
+        run: node --test plugins/evoagent/tests/*.test.js
       - name: Test release tooling
-        run: node --test --test-isolation=none scripts/release-plugin.test.mjs
+        run: node --test scripts/release-plugin.test.mjs
       - name: Test Python core
         run: python -m unittest discover -s tests -v
       - name: Pack immutable release assets
