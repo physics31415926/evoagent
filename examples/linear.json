@@ -1,0 +1,7 @@
+{
+  "id": "linear-demo",
+  "prompt": "Compute 2*x + 1",
+  "kind": "expression",
+  "inputs": [-2, 0, 3, 10],
+  "expected": [-3, 1, 7, 21]
+}

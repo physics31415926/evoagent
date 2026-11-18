@@ -1,0 +1,7 @@
+{
+  "id": "linear-transfer",
+  "prompt": "Compute 3*x + 1",
+  "kind": "expression",
+  "inputs": [-2, 0, 3, 10],
+  "expected": [-5, 1, 10, 31]
+}

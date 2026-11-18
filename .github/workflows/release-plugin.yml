@@ -1,0 +1,63 @@
+name: Release EvoAgent plugin
+
+on:
+  push:
+    tags:
+      - 'dsh-plugin-v*'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: release-plugin-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  release:
+    if: github.repository == 'physics31415926/evoagent'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Check release inputs
+        run: node scripts/release-plugin.mjs --check
+      - name: Test plugin
+        run: node --test --test-isolation=none plugins/evoagent/tests/*.test.js
+      - name: Test release tooling
+        run: node --test --test-isolation=none scripts/release-plugin.test.mjs
+      - name: Test Python core
+        run: python -m unittest discover -s tests -v
+      - name: Pack immutable release assets
+        run: node scripts/release-plugin.mjs
+      - name: Create draft, upload assets, then publish
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: physics31415926/evoagent
+          TAG: ${{ github.ref_name }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          # Distinguish a missing release from auth/network/server errors; never
+          # treat an arbitrary failed view request as permission to overwrite.
+          gh api --paginate "repos/$GH_REPO/releases?per_page=100" --jq '.[].tag_name' > "$RUNNER_TEMP/evoagent-release-tags.txt"
+          if grep -Fxq -- "$TAG" "$RUNNER_TEMP/evoagent-release-tags.txt"; then
+            echo "Refusing to replace existing release $TAG" >&2
+            exit 1
+          fi
+          VERSION="${TAG#dsh-plugin-v}"
+          ASSET="dist/dsh-evoagent-$VERSION.tgz"
+          test -s "$ASSET"
+          test -s "$ASSET.sha256"
+          (cd dist && sha256sum -c "dsh-evoagent-$VERSION.tgz.sha256")
+          gh release create "$TAG" --verify-tag --draft --title "EvoAgent plugin $VERSION" --generate-notes
+          gh release upload "$TAG" "$ASSET" "$ASSET.sha256"
+          gh release edit "$TAG" --draft=false --latest

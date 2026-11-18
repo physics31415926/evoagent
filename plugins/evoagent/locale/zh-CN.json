@@ -1,0 +1,1 @@
+{"meta":{"title":"EvoAgent 探索实验室","description":"仅 Host 工具，无独立面板。定期检查 GitHub 更新，安装需确认具体版本；evoagent_update 可查状态。evoagent_plan → 审阅 requests → evoagent_explore → evoagent_records。复用已配置 provider/model，向其发送任务 prompt 和策略，可能收费；停用或重启会丢失临时缓存。不自动训练或激活策略，算术样本通过不等于正确性证明。"}}

@@ -1,0 +1,5 @@
+{
+  "id": "research-draft",
+  "prompt": "Compare memory-based agent improvement with model parameter training. Identify evidence needed to establish transfer to unseen tasks, and distinguish hypotheses from verified facts.",
+  "kind": "research"
+}

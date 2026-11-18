@@ -1,0 +1,16 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "evoagent"
+version = "0.1.0"
+description = "An evidence-driven agent experiment with bounded branching, memory and policy comparison"
+requires-python = ">=3.11"
+dependencies = []
+
+[project.scripts]
+evoagent = "evoagent.cli:main"
+
+[tool.setuptools.packages.find]
+include = ["evoagent*"]
